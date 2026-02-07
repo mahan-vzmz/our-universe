@@ -34,6 +34,7 @@
         }
 
         #heart-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
         #intro-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 1000;
@@ -61,14 +62,14 @@
             position: relative; z-index: 10;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 1s ease;
-            width: 100%; height: 100%; 
+            width: 100%; height: 100%;
         }
         #main-content.visible { opacity: 1; pointer-events: all; }
 
         .photo-container {
             position: relative;
             width: 260px; height: 260px;
-            margin-bottom: 25px; 
+            margin-bottom: 25px;
             border-radius: 20px;
             box-shadow: 0 0 40px rgba(255, 10, 84, 0.2);
             animation: float 6s ease-in-out infinite;
@@ -146,7 +147,7 @@
             text-shadow: 0 0 5px rgba(255, 10, 84, 0.3);
             letter-spacing: 1px;
             opacity: 0;
-            animation: fadeInSig 3s ease forwards 2s; 
+            animation: fadeInSig 3s ease forwards 2s;
         }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -182,7 +183,7 @@
             <div class="time-unit"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
             <div class="time-unit"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
         </div>
-        <div class="Vazirmatn">
+        <div class="Vazirani">
             از روزی که تو شدی اتفاق خوب زندگیم
         </div>
     </div>
@@ -230,7 +231,7 @@
             main.classList.add('visible');
             initCanvas();
             revealImage();
-            shuffleReasons(); ا
+            shuffleReasons();  
             newMessage();
         }, 800);
     }
@@ -355,6 +356,4 @@
 </script>
 
 </body>
-
 </html>
-
