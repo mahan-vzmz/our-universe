@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Our Universe ❤️</title>
+
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Outfit:wght@100;400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* فونت نستعلیق آنلاین */
+        @font-face {
+            font-family: 'Nastaliq';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-web@3.0.0/dist/IranNastaliq.woff2') format('woff2');
+            font-weight: normal; font-style: normal;
+        }
+
+        :root {
+            --primary: #ff0a54;
+            --accent: #ff477e;
+            --bg: #050002;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Vazirmatn', sans-serif;
+            overflow: hidden;
+            height: 100vh; width: 100vw;
+            display: flex; justify-content: center; align-items: center;
+            position: fixed;
+        }
+
+        /* --- پس‌زمینه --- */
+        #heart-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+        /* --- صفحه ورود --- */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 1000;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .enter-btn {
+            background: rgba(255, 10, 84, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 50px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Great Vibes', cursive;
+            box-shadow: 0 0 20px rgba(255, 10, 84, 0.3);
+            animation: pulseBtn 2s infinite;
+        }
+        @keyframes pulseBtn {
+            0% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 10, 84, 0.6); } 100% { transform: scale(1); }
+        }
+
+        /* --- محتوای اصلی --- */
+        #main-content {
+            position: relative; z-index: 10;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 1s ease;
+            width: 100%; height: 100%; /* ارتفاع کامل برای قرارگیری امضا */
+        }
+        #main-content.visible { opacity: 1; pointer-events: all; }
+
+        /* --- عکس --- */
+        .photo-container {
+            position: relative;
+            width: 260px; height: 260px;
+            margin-bottom: 25px; /* فاصله کم شد تا جا باز شود */
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 10, 84, 0.2);
+            animation: float 6s ease-in-out infinite;
+        }
+        .couple-photo {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 20px;
+            mix-blend-mode: lighten; filter: contrast(1.2);
+        }
+        .reveal-grid {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);
+            border-radius: 20px; overflow: hidden;
+        }
+        .grid-cell { background: #000; transition: opacity 0.5s ease; }
+        .grid-cell.hidden { opacity: 0; }
+
+        /* --- باکس بزرگ شیشه‌ای تایمر --- */
+        .glass-timer {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 20px 30px;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: float 6s ease-in-out infinite reverse;
+            max-width: 90%;
+            min-width: 300px;
+        }
+
+        .timer-row {
+            display: flex; justify-content: center; gap: 20px; width: 100%;
+            direction: ltr; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;
+        }
+        .time-unit { display: flex; flex-direction: column; align-items: center; }
+        .number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem; font-weight: 700;
+            background: linear-gradient(180deg, #fff, #ffccd5);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(255, 10, 84, 0.3));
+        }
+        .label {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1rem; color: var(--accent); margin-top: -5px; opacity: 0.9;
+        }
+        .nastaliq-caption {
+            font-family: 'Nastaliq', serif;
+            font-size: 1.6rem; color: #ffccd5;
+            text-shadow: 0 0 10px rgba(255, 10, 84, 0.5);
+            text-align: center; line-height: 1.8; margin-top: 5px;
+        }
+
+        /* --- پیام‌های متغیر --- */
+        .message-box {
+            margin-top: 20px; height: 30px; text-align: center; width: 100%;
+        }
+        .typewriter {
+            font-family: 'Vazirmatn', sans-serif; font-weight: 300; font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            direction: rtl;
+            unicode-bidi: plaintext;
+            white-space: nowrap
+        }
+
+        /* --- امضای پایانی (اضافه شده) --- */
+        .signature {
+            position: absolute;
+            bottom: 20px;
+            font-family: 'Nastaliq', serif;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 5px rgba(255, 10, 84, 0.3);
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInSig 3s ease forwards 2s; /* ظاهر شدن با تاخیر */
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes fadeInSig { from { opacity: 0; } to { opacity: 0.6; } }
+
+        @media (max-width: 400px) {
+            .timer-row { gap: 10px; }
+            .number { font-size: 1.8rem; }
+            .photo-container { width: 220px; height: 220px; }
+            .nastaliq-caption { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="intro-screen">
+    <button class="enter-btn" onclick="startApp()">Open Gift 🎁</button>
+</div>
+
+<canvas id="heart-canvas"></canvas>
+
+<div id="main-content">
+
+    <div class="photo-container">
+        <img src="couple.jpg" alt="Us" class="couple-photo">
+        <div class="reveal-grid" id="revealGrid"></div>
+    </div>
+
+    <div class="glass-timer">
+        <div class="timer-row">
+            <div class="time-unit"><span class="number" id="days">00</span><span class="label">Days</span></div>
+            <div class="time-unit"><span class="number" id="hours">00</span><span class="label">Hours</span></div>
+            <div class="time-unit"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
+            <div class="time-unit"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
+        </div>
+        <div class="nastaliq-caption">
+            از روزی که تو شدی اتفاق خوب زندگیم
+        </div>
+    </div>
+
+    <div class="message-box">
+        <p id="typing-text" class="typewriter"></p>
+    </div>
+
+    <div class="signature">
+         ساخته شده توسط کسی که دیوونه‌ته
+    </div>
+
+</div>
+
+<script>
+    const CONFIG = {
+        startDate: new Date(2025, 11, 7),
+        reasons: [
+            "کی فکرشو میکرد😂",
+            "زندگیم بعد از تو کلا عوض شد.😌",
+            "نمیدونم نتیجه کدوم کار خوبمی🤍",
+            "کاشکی زود تر باهات آشنا میشدم🥺"
+        ]
+    };
+
+    /* ====== SHUFFLE LOGIC (اضافه شده) ====== */
+    let shuffledReasons = [];
+    let reasonPointer = 0;
+
+    function shuffleReasons() {
+        shuffledReasons = [...CONFIG.reasons];
+        for (let i = shuffledReasons.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledReasons[i], shuffledReasons[j]] = [shuffledReasons[j], shuffledReasons[i]];
+        }
+        reasonPointer = 0;
+    }
+    /* ===================================== */
+
+    function startApp() {
+        const intro = document.getElementById('intro-screen');
+        const main = document.getElementById('main-content');
+
+        intro.style.opacity = '0';
+        setTimeout(() => {
+            intro.style.display = 'none';
+            main.classList.add('visible');
+            initCanvas();
+            revealImage();
+            shuffleReasons();   // ← اضافه شده
+            newMessage();
+        }, 800);
+    }
+
+    function revealImage() {
+        const grid = document.getElementById('revealGrid');
+        const cells = [];
+        for(let i=0; i<100; i++) {
+            let div = document.createElement('div');
+            div.className = 'grid-cell';
+            grid.appendChild(div);
+            cells.push(div);
+        }
+        for (let i = cells.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cells[i], cells[j]] = [cells[j], cells[i]];
+        }
+        let i = 0;
+        let int = setInterval(() => {
+            if(i >= cells.length) {
+                clearInterval(int);
+                setTimeout(()=> grid.style.display='none', 500);
+            } else {
+                cells[i].classList.add('hidden');
+                i++;
+            }
+        }, 15);
+    }
+
+    function updateTimer() {
+        const now = new Date();
+        const diff = now - CONFIG.startDate;
+        if (diff < 0) return;
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        document.getElementById('days').innerText = d;
+        document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+        document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
+        document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    function newMessage() {
+        const el = document.getElementById('typing-text');
+
+        if (shuffledReasons.length === 0 || reasonPointer >= shuffledReasons.length) {
+            shuffleReasons();
+        }
+
+        const text = shuffledReasons[reasonPointer];
+        reasonPointer++;
+
+        el.innerHTML = "";
+        const chars = [...text];
+        let i = 0;
+
+        const typing = setInterval(() => {
+            if (i < chars.length) {
+                el.innerHTML += (chars[i] === " ") ? "&nbsp;" : chars[i];
+                i++;
+            } else {
+                clearInterval(typing);
+                setTimeout(newMessage, 4000);
+            }
+        }, 100);
+    }
+
+    const canvas = document.getElementById('heart-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, particles = [];
+
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Heart {
+        constructor() { this.reset(true); }
+        reset(init = false) {
+            this.x = Math.random() * width;
+            this.y = init ? Math.random() * height : -20;
+            this.size = Math.random() * 8 + 4;
+            this.speed = Math.random() * 1.5 + 0.5;
+            this.color = `rgba(255, 10, 84, ${Math.random() * 0.4 + 0.2})`;
+            this.wobble = Math.random() * Math.PI * 2;
+        }
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            let s = this.size / 2;
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(-s, -s, -s*1.5, s/3, 0, s*1.5);
+            ctx.bezierCurveTo(s*1.5, s/3, s, -s, 0, 0);
+            ctx.fill();
+            ctx.restore();
+        }
+        update() {
+            this.y += this.speed;
+            this.x += Math.sin(this.wobble) * 0.5;
+            this.wobble += 0.05;
+            if (this.y > height + 20) this.reset();
+        }
+    }
+
+    function initCanvas() {
+        particles = [];
+        for(let i=0; i<50; i++) particles.push(new Heart());
+        animate();
+    }
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animate);
+    }
+</script>
+
+</body>
+</html>
